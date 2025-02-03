@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Package a lambda function
-      uses: nickminaev/package-lambda-with-uv-action@dd5544e30824004aa798eaae219db92a8b83dec6
+      uses: nickminaev/package-lambda-with-uv-action@ea77d8be95c3eb180f604d124da18ebb34b70bc5
       with:
         working-directory: lambdas/src/tg_bot_authorizer
 
