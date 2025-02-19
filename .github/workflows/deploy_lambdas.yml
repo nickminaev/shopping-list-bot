@@ -5,22 +5,25 @@ name: Deploy Lambda Functions
 
 on:
   workflow_dispatch:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Package a lambda function
-      uses: nickminaev/package-lambda-with-uv-action@v0
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
       with:
-        working-directory: lambdas/src/tg_bot_authorizer
+        terraform_wrapper: false
+    - uses: kishaningithub/setup-tf-summarize@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
 
