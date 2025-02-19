@@ -25,5 +25,17 @@ jobs:
     - uses: kishaningithub/setup-tf-summarize@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Assume the role
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: eu-central-1
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.TG_BOT_DEPLOYER_ROLE_NAME }}
+        role-session-name: deployInfra
+    - name: Terraform Init
+      run: terraform init
+    - name: Terraform validate
+      run: terraform validate 
+    - name: Terraform Format
+      run: terraform fmt -check
 
 
