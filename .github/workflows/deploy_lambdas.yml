@@ -32,7 +32,7 @@ jobs:
       with:
         aws-region: eu-central-1
         role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.TG_BOT_DEPLOYER_ROLE_NAME }}
-        role-session-name: deployInfra
+        role-session-name: deployLambdas
     - name: Terraform Init
       run: terraform init
     - name: Terraform validate
