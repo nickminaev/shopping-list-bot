@@ -26,36 +26,37 @@ jobs:
       name: 'Get the SHAs to calculate which functions to build'
       id: setSHAs
     - run: |
-        git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}
+        files=$(git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }})
+        echo $files >> changes.txt
+        cat changes.txt
 
-
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      pull-requests: write
-    needs:
-      - determine-builds
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_wrapper: false
-    - uses: kishaningithub/setup-tf-summarize@v2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Assume the role
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-region: eu-central-1
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.TG_BOT_DEPLOYER_ROLE_NAME }}
-        role-session-name: deployLambdas
-    - name: Terraform Init
-      run: terraform init
-    - name: Terraform validate
-      run: terraform validate 
-    - name: Terraform Format
-      run: terraform fmt -check
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     id-token: write
+  #     pull-requests: write
+  #   needs:
+  #     - determine-builds
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Setup Terraform
+  #     uses: hashicorp/setup-terraform@v1
+  #     with:
+  #       terraform_wrapper: false
+  #   - uses: kishaningithub/setup-tf-summarize@v2
+  #     with:
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #   - name: Assume the role
+  #     uses: aws-actions/configure-aws-credentials@v4
+  #     with:
+  #       aws-region: eu-central-1
+  #       role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.TG_BOT_DEPLOYER_ROLE_NAME }}
+  #       role-session-name: deployLambdas
+  #   - name: Terraform Init
+  #     run: terraform init
+  #   - name: Terraform validate
+  #     run: terraform validate 
+  #   - name: Terraform Format
+  #     run: terraform fmt -check
 
 
