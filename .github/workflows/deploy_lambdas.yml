@@ -27,7 +27,8 @@ jobs:
       id: setSHAs
     - run: |
         files=($(git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}))
-        echo "${#files[@]}"
+        json_array=$(printf '%s\n' "${files[@]}" | jq -R . | jq -s .)
+        echo $json_array
 
   # deploy:
   #   runs-on: ubuntu-latest
