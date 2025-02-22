@@ -28,11 +28,12 @@ jobs:
     - run: |
         files=($(git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}))
         json_array=$(printf '%s\n' "${files[@]}" | jq -R . | jq -s .)
-        echo $json_array
+        echo "affected_files_list=$json_array" >> $GITHUB_OUTPUT
       name: 'Get the list of the affected files'
       id: affected_files_list
     - run: |
-       print("hello!")
+       from pathlib import Path
+       print("${{ steps.affected_files_list.outputs.affected_files_list }}")
       shell: python
 
   # deploy:
