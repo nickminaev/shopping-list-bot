@@ -26,7 +26,7 @@ jobs:
       name: 'Get the SHAs to calculate which functions to build'
       id: setSHAs
     - run: |
-        get diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}
+        git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}
 
 
   deploy:
