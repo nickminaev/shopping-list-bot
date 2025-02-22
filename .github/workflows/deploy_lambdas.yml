@@ -12,12 +12,30 @@ on:
 
 permissions:
   contents: read
-  id-token: write
-  pull-requests: write
 
 jobs:
+  determine-builds:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: nrwl/nx-set-shas@v4
+      name: 'Get the SHAs to calculate which functions to build'
+      id: setSHAs
+    - run: |
+        get diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}
+
+
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: write
+    needs:
+      - determine-builds
     steps:
     - uses: actions/checkout@v4
     - name: Setup Terraform
