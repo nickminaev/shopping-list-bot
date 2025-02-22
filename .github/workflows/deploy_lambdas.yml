@@ -26,9 +26,8 @@ jobs:
       name: 'Get the SHAs to calculate which functions to build'
       id: setSHAs
     - run: |
-        files=$(git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }})
-        echo $files >> changes.txt
-        cat changes.txt
+        files=($(git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}))
+        echo "${#files[@]}"
 
   # deploy:
   #   runs-on: ubuntu-latest
