@@ -29,6 +29,11 @@ jobs:
         files=($(git diff --name-only ${{ steps.setSHAs.outputs.base }}..${{ steps.setSHAs.outputs.head }}))
         json_array=$(printf '%s\n' "${files[@]}" | jq -R . | jq -s .)
         echo $json_array
+      name: 'Get the list of the affected files'
+      id: affected_files_list
+    - run: |
+       print("hello!")
+      shell: python
 
   # deploy:
   #   runs-on: ubuntu-latest
