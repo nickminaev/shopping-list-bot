@@ -33,7 +33,7 @@ response = {
             'body': 'OK'
            }
 
-# test the changes 1
+# test the changes 2
 
 parser = ArgumentParser()
 parser.add_argument("command")
