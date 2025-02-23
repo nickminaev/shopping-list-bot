@@ -40,15 +40,18 @@ jobs:
         import json
         from pathlib import Path
         affected_files_json=os.environ.get('AFFECTED_FILES_JSON')
+        lambda_packages_source_path=os.environ.get('LAMBDA_PACKAGES_SOURCES_PATH')
         if affected_files_json is None:
           print("Didn't get any output from the previous step. Aborting execution")
           exit(1)
         affected_files_list=json.loads(affected_files_json)
-        affected_files_paths=[Path(file) for file in affected_files_list]
-        print(affected_files_paths)
+        affected_files_paths=[Path(file_path_str) for file_path_str in affected_files_list if lambda_packages_source_path in file_path_str]
+        print(f'Converted the file paths into Path objects list: {affected_files_paths}')
       shell: python
       env:
         AFFECTED_FILES_JSON: ${{ steps.affected_files_list.outputs.affected_files_list }}
+        LAMBDA_PACKAGES_SOURCES_PATH: ${{ vars.LAMBDAPACKAGESSOURCEPATH }}
+      name: 'Derive project names from the affected files'
 
   # deploy:
   #   runs-on: ubuntu-latest
