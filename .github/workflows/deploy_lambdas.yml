@@ -53,7 +53,7 @@ jobs:
           prev_parent = changed_file_path
           print(f'Initial parent is: {prev_parent}')
           for level in range(len(changed_file_path.parents)-1):
-            if changed_file_path.parents[level]==lambda_packages_source_path:
+            if str(changed_file_path.parents[level])==lambda_packages_source_path:
               print(f'Reached the topmost possible path: {changed_file_path.parents[level]}')
               print(f'Adding the previous parent to the list of proejcts: {prev_parent}')
               projects_to_build.add(str(prev_parent))
