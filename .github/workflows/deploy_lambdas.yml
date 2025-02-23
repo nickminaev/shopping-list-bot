@@ -50,7 +50,7 @@ jobs:
         projects_to_build=[]
         for changed_file_path in affected_files_paths:
           prev_parent = changed_file_path
-          for level in range(len(file.parents)-1):
+          for level in range(len(changed_file_path.parents)-1):
             if file.parents[level]==lambda_packages_source_path:
               projects_to_build.add(str(prev_parent))
               continue
