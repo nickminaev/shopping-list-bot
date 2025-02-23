@@ -49,8 +49,13 @@ jobs:
         print(f'Converted the file paths into Path objects list: {affected_files_paths}')
         projects_to_build=[]
         for changed_file_path in affected_files_paths:
-          parents=changed_file_path.parents
-          print(parents)
+          prev_parent = changed_file_path
+          for level in range(len(file.parents)-1):
+            if file.parents[level]==lambda_packages_source_path:
+              projects_to_build.add(str(prev_parent))
+              continue
+            prev_parent=file.parents[level]
+        print(projects_to_build)      
       shell: python
       env:
         AFFECTED_FILES_JSON: ${{ steps.affected_files_list.outputs.affected_files_list }}
