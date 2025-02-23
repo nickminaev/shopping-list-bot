@@ -49,12 +49,17 @@ jobs:
         print(f'Converted the file paths into Path objects list: {affected_files_paths}')
         projects_to_build=[]
         for changed_file_path in affected_files_paths:
+          print(f'Exploring parents of the following file that has changed: {changed_file_path}')
           prev_parent = changed_file_path
+          print(f'Initial parent is: {prev_parent}')
           for level in range(len(changed_file_path.parents)-1):
             if changed_file_path.parents[level]==lambda_packages_source_path:
+              print(f'Reached the topmost possible path: {changed_file_path.parents[level]}')
+              print(f'Adding the previous parent to the list of proejcts: {prev_parent}')
               projects_to_build.add(str(prev_parent))
               continue
             prev_parent=changed_file_path.parents[level]
+            print(f'Current file path is: {prev_parent}')
         print(projects_to_build)      
       shell: python
       env:
