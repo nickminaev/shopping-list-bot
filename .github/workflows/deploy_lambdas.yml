@@ -40,11 +40,12 @@ jobs:
         import json
         from pathlib import Path
         affected_files_json=os.environ.get('AFFECTED_FILES_JSON')
-        print(affected_files_json)
         if affected_files_json is None:
           print("Didn't get any output from the previous step. Aborting execution")
           exit(1)
         affected_files_list=json.loads(affected_files_json)
+        affected_files_paths=[Path(file) for file in affected_files_list]
+        print(affected_files_paths)
       shell: python
       env:
         AFFECTED_FILES_JSON: ${{ steps.affected_files_list.outputs.affected_files_list }}
