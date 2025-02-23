@@ -33,9 +33,14 @@ jobs:
       name: 'Get the list of the affected files'
       id: affected_files_list
     - run: |
-       from pathlib import Path
-       print("${{ steps.affected_files_list.outputs.affected_files_list }}")
+        import os
+        import json
+        from pathlib import Path
+        affected_files_json=os.environ.get('AFFECTED_FILES_JSON')
+        print(affected_files_json)
       shell: python
+      env:
+        AFFECTED_FILES_JSON: ${{ steps.affected_files_list.outputs.affected_files_list }}
 
   # deploy:
   #   runs-on: ubuntu-latest
