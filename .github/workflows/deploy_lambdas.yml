@@ -54,7 +54,7 @@ jobs:
             if changed_file_path.parents[level]==lambda_packages_source_path:
               projects_to_build.add(str(prev_parent))
               continue
-            prev_parent=file.parents[level]
+            prev_parent=changed_file_path.parents[level]
         print(projects_to_build)      
       shell: python
       env:
