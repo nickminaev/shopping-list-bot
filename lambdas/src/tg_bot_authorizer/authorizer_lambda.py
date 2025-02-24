@@ -20,7 +20,7 @@ response = {
 
 bot_auth_key = os.environ.get(TG_SECRET_ENV)
 
-# test changes 17889909000
+# test changes acacadads
 
 def handler(event, context):
     if bot_auth_key is None:
