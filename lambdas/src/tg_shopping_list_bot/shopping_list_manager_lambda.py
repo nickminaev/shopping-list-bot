@@ -33,7 +33,7 @@ response = {
             'body': 'OK'
            }
 
-# test the changes 100113737389000889
+# test the changes 78900
 
 parser = ArgumentParser()
 parser.add_argument("command")
