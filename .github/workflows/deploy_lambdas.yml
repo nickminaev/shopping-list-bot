@@ -86,37 +86,50 @@ jobs:
         echo "package_name=$package_name" >> "$GITHUB_OUTPUT"
       id: get-package-name
     - name: Package a lambda function
+      id: prepare-lambda
       uses: nickminaev/package-lambda-with-uv-action@v0
       with:
         working-directory: ${{ matrix.package }}
         output-package-name: ${{ steps.get-package-name.outputs.package_name }}
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     id-token: write
-  #     pull-requests: write
-  #   needs:
-  #     - determine-builds
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - name: Setup Terraform
-  #     uses: hashicorp/setup-terraform@v1
-  #     with:
-  #       terraform_wrapper: false
-  #   - uses: kishaningithub/setup-tf-summarize@v2
-  #     with:
-  #       github-token: ${{ secrets.GITHUB_TOKEN }}
-  #   - name: Assume the role
-  #     uses: aws-actions/configure-aws-credentials@v4
-  #     with:
-  #       aws-region: eu-central-1
-  #       role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.TG_BOT_DEPLOYER_ROLE_NAME }}
-  #       role-session-name: deployLambdas
-  #   - name: Terraform Init
-  #     run: terraform init
-  #   - name: Terraform validate
-  #     run: terraform validate 
-  #   - name: Terraform Format
-  #     run: terraform fmt -check
+    - name: 'Upload the package archive'
+      if: ${{ steps.prepare-lambda.outputs.destination == 'direct' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.get-package-name.outputs.package_name }}
+        path: '${{ steps.get-package-name.outputs.package_name }}.zip'
+        overwrite: true
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: write
+    needs:
+      - build
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        merge-multiple: true
+        path: lambda_packages
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: false
+    - uses: kishaningithub/setup-tf-summarize@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Assume the role
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: eu-central-1
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.TG_BOT_DEPLOYER_ROLE_NAME }}
+        role-session-name: deployLambdas
+    - name: Terraform Init
+      run: terraform init
+    - name: Terraform validate
+      run: terraform validate 
+    - name: Terraform Format
+      run: terraform fmt -check
 
 
