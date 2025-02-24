@@ -81,7 +81,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - run: |
-        echo "package_name=$(echo ${{ matrix.package }} | sed s#${{ vars.LAMBDAPACKAGESSOURCEPATH }}/##)" >> GITHUB_OUTPUT
+        package_name=$(echo ${{ matrix.package }} | sed s#${{ vars.LAMBDAPACKAGESSOURCEPATH }}/##)
+        echo "$package_name"
+        echo "package_name=$package_name" >> GITHUB_OUTPUT
       id: get-package-name
     - name: Package a lambda function
       uses: nickminaev/package-lambda-with-uv-action@v0
