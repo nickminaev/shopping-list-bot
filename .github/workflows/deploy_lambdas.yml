@@ -91,14 +91,12 @@ jobs:
       with:
         working-directory: ${{ matrix.package }}
         output-package-name: ${{ steps.get-package-name.outputs.package_name }}
-    - run: |
-        echo "${{ steps.prepare-lambda.outputs.destination }}"
     - name: 'Upload the package archive'
       if: ${{ steps.prepare-lambda.outputs.destination == 'direct' }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.get-package-name.outputs.package_name }}
-        path: '${{ steps.get-package-name.outputs.package_name }}.zip'
+        path: '${{ matrix.package }}/${{ steps.get-package-name.outputs.package_name }}.zip'
         overwrite: true
 
   deploy:
