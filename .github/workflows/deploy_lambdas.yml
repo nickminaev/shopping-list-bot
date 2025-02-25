@@ -87,7 +87,7 @@ jobs:
       id: get-package-name
     - name: Package a lambda function
       id: prepare-lambda
-      uses: nickminaev/package-lambda-with-uv-action@v0
+      uses: nickminaev/package-lambda-with-uv-action@main
       with:
         working-directory: ${{ matrix.package }}
         output-package-name: ${{ steps.get-package-name.outputs.package_name }}
