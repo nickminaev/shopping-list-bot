@@ -113,7 +113,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
-      if: ${{ needs.determine-builds.outputs.how-many-projects-to-build }}
+      if: ${{ needs.build.result == 'success' || needs.build.result == 'skipped' }}
       with:
         merge-multiple: true
         path: lambda_packages
