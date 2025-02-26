@@ -20,6 +20,7 @@ jobs:
       actions: read
     outputs:
       projects_to_build: ${{ steps.get-build-projects.outputs.project_dirs_to_build }}
+      how-many-projects-to-build: ${{ steps.get-build-projects.outputs.how-many-projects-to-build }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -64,7 +65,8 @@ jobs:
             print(f'Current file path is: {prev_parent}')
         print(projects_to_build)
         with open(os.environ.get('GITHUB_OUTPUT'), 'a') as fh:
-          fh.write(f'project_dirs_to_build={json.dumps(projects_to_build)}')     
+          fh.write(f'project_dirs_to_build={json.dumps(projects_to_build)}')
+          fh.write(f'how-many-projects-to-build={len(projects_to_build)}')     
       shell: python
       id: get-build-projects
       env:
@@ -72,6 +74,7 @@ jobs:
         LAMBDA_PACKAGES_SOURCES_PATH: ${{ vars.LAMBDAPACKAGESSOURCEPATH }}
       name: 'Derive project names from the affected files'
   build:
+    if: ${{ needs.determine-builds.outputs.how-many-projects-to-build > 0 }}
     runs-on: ubuntu-latest
     needs: determine-builds
     continue-on-error: true
@@ -105,10 +108,12 @@ jobs:
       id-token: write
       pull-requests: write
     needs:
+      - determine-builds
       - build
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
+      if: ${{ needs.determine-builds.outputs.how-many-projects-to-build }}
       with:
         merge-multiple: true
         path: lambda_packages
