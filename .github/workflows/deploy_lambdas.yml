@@ -110,10 +110,11 @@ jobs:
     needs:
       - determine-builds
       - build
+    if: ${{ always() && (needs.build.result == 'skipped' || needs.build.result == 'success' )}}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
-      if: ${{ needs.build.result == 'success' || needs.build.result == 'skipped' }}
+      if: ${{ needs.determine-builds.outputs.how-many-projects-to-build > 0 }}
       with:
         merge-multiple: true
         path: lambda_packages
