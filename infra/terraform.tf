@@ -7,9 +7,9 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "shopping-manager-bot-backend"
-    key            = "tg_bot.tfstate"
-    encrypt        = true
-    use_lockfile   = true
+    bucket       = "shopping-manager-bot-backend"
+    key          = "tg_bot.tfstate"
+    encrypt      = true
+    use_lockfile = true
   }
 }
