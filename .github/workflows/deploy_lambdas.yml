@@ -149,7 +149,7 @@ jobs:
           tf-summarize -md tfplan
           echo EOF
         } >> "$GITHUB_OUTPUT"
-        echo "$(tf-summarize tfplan)" >> $GITHUB_STEP_SUMMARY
+        echo "$(tf-summarize -md tfplan)" >> $GITHUB_STEP_SUMMARY
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
       run: terraform apply tfplan
