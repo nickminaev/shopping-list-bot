@@ -137,5 +137,18 @@ jobs:
       run: terraform validate 
     - name: Terraform Format
       run: terraform fmt -check
+    - name: Terraform Plan
+      id: plan
+      run: |
+        terraform plan -input=false -out=tfplan
+        { 
+          echo 'tf_summarize_output<<EOF'
+          tf-summarize -md tfplan
+          echo EOF
+        } >> "$GITHUB_OUTPUT"
+        echo "$(tf-summarize tfplan)" >> $GITHUB_STEP_SUMMARY
+    # - name: Terraform Apply
+    #   if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    #   run: terraform apply tfplan
 
 
