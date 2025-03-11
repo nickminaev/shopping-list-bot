@@ -1,3 +1,6 @@
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
 data "aws_iam_policy_document" "lambda_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -10,8 +13,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 data "aws_iam_policy" "lambda_deployer_permission_boundary" {
-  name        = "DeployerPermissions"
-  path_prefix = "/developers/"
+  arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/developers/UsersManageOwnCredentials"
 }
 
 resource "aws_iam_role" "shopping_manager_lambda_role" {
