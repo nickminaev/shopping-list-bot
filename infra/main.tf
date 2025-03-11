@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 data "aws_iam_policy" "lambda_deployer_permission_boundary" {
-  name = "DeployerPermissions"
+  name        = "DeployerPermissions"
   path_prefix = "/developers/"
 }
 
