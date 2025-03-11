@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 data "aws_iam_policy" "lambda_deployer_permission_boundary" {
-  arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/developers/UsersManageOwnCredentials"
+  arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/developers/IAMRolesPermissionBoundaries"
 }
 
 resource "aws_iam_role" "shopping_manager_lambda_role" {
